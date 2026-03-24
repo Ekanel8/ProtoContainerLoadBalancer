@@ -7,15 +7,15 @@ import (
 	"syscall"
 )
 
-func subrun() int {
+func subrun() {
 	fmt.Printf("SubRunnning %v as PID %d\n", os.Args[2:], os.Getpid())
 
-	cgrp()
+	cgroupctrl()
 
 	syscall.Sethostname([]byte("container"))
-	syscall.Chroot("/app/Notroot")
+	syscall.Chroot("/home/" + user + "/" + fs)
 	syscall.Chdir("/")
-	syscall.Mount("proc", "proc", "proc", 0, "") /// ???
+	syscall.Mount("proc", "proc", "proc", 0, "") /// TODO: wiki
 	os.Setenv("PATH", "/bin:/usr/bin:/sbin:/usr/sbin")
 
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
@@ -26,5 +26,4 @@ func subrun() int {
 	cmd.Run()
 
 	must(syscall.Unmount("/proc", 0))
-	return 0
 }

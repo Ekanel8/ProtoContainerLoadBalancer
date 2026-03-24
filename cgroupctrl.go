@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func cgrp() {
+func cgroupctrl() { // TODO: %CPU %MEM
 	err := os.MkdirAll(protoContainerPath, 0700)
 	if err != nil {
 		panic("Failed to create cgroup dir")
